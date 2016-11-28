@@ -1,11 +1,11 @@
 var ctx;
 var canvas;
-var pixelSize = 10;
+var pixelSize = 5;
 
 var rule = 62;
 var ruleArray = new Array(8);
 
-var ruleset = [30,230,188];
+var ruleset = [30,118, 46,56];
 
 var width,height,image;
 
@@ -68,20 +68,26 @@ function perform(){
     for(var y = 0; y< height; y++){
         for(var x = 0; x< width; x++){
             if(image[y][x]){
-                drawSquare(x*pixelSize,y*pixelSize, 'black', pixelSize);
+                drawSquare(x*pixelSize,y*pixelSize, 'rgb('+Math.floor(height-y+255-y)+','+Math.floor(height-y+255-y)+','+Math.floor(height-y+255-y)+')', pixelSize);
                 num++;
             } else {
                 drawSquare(x*pixelSize,y*pixelSize, 'skyblue', pixelSize);
                 var tmp = y;
                 while(tmp>0){
                     if(image[tmp][x]){
-                        drawSquare(x*pixelSize,y*pixelSize, 'green', pixelSize);
+                        drawSquare(x*pixelSize,y*pixelSize, 'rgb('+Math.floor(y*0.5)+','+Math.floor(y*0.5)+','+Math.floor(y*0.5)+')', pixelSize);
                         tmp=0;
+                        console.log('rgb('+Math.ceil(height-y)+','+Math.ceil(height-y)+','+Math.ceil(height-y)+')');
                     }
                     tmp--;
                 }
                 if(y>1 && image[y-1][x]){
-                    drawSquare(x*pixelSize,y*pixelSize, 'grey', pixelSize);
+                    if(y>1 && image[y-2][x]){
+                        drawSquare(x*pixelSize,y*pixelSize, 'rgb('+Math.floor(y*1)+','+Math.floor(y*1)+','+Math.floor(y*1)+')', pixelSize);
+                    } else {
+                        drawSquare(x*pixelSize,y*pixelSize, 'rgb('+Math.floor(y*0.5)+','+Math.floor(y*0.7)+','+Math.floor(y*0.8)+')', pixelSize);
+                    }
+                    
                 }
             }
             
@@ -98,7 +104,7 @@ function calculateCell(a){
     for (var i = 0; i < l; ++i) {
         n = (n << 1) + (a[i] ? 1 : 0);
     }
-    console.log(ruleArray.length-n);
+//    console.log(ruleArray.length-n);
     
     return ruleArray[ruleArray.length-n-1];
 }
