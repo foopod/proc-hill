@@ -42,26 +42,19 @@ function perform(){
             if(x > 1 && x < width-2){
                 var sub = image[y-1].slice(x-1,x+2);
 //                var sub2 = image[y-2].slice(x-2,x+3);
-                var num = 0;
-                for(var t = 0; t < sub.length; t++){
-                    if(sub[t]){
-                        num++;
+//                var num = 0;
+//                for(var t = 0; t < sub.length; t++){
+//                    if(sub[t]){
+//                        num++;
+//                    }
+//                }
+                image[y][x] =calculateCell(sub);   
+                if(!image[y][x]){
+                    if(Math.random()<0.001 && y >height/2){
+                        
+                        image[y][x] = true;
                     }
                 }
-//                console.log(sub);
-//                console.log(calculateCell(sub));
-                image[y][x] =calculateCell(sub);
-//                if((num>=0 && num<2) || ((image[y-2][x+1] || image[y-2][x-1]))){
-////                    console.log(true);
-//                    if(num == 1 && (sub[0] || sub[4])){
-//                        
-////                    console.log(image);
-//                       }else{
-//                           
-//                            image[y][x] = true;
-//                           }
-//            }
-//                
             }
         }
     }
