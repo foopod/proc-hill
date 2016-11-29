@@ -1,6 +1,6 @@
 var ctx;
 var canvas;
-var pixelSize = 8;
+var pixelSize = 6;
 
 var rule = 62;
 var ruleArray = new Array(8);
@@ -49,7 +49,7 @@ function perform(){
 //                }
                 image[y][x] =calculateCell(sub);   
                 if(!image[y][x]){
-                    if(Math.random()<0.001 && y >height/2){
+                    if(Math.random()<0.000005 *y){
                         
                         image[y][x] = true;
                     }
@@ -119,10 +119,11 @@ function perform(){
         }
     }
     
+    //2nd Pass for waterfalls
     var waterfallNum = 0.0;
     for(var y = 4; y< height-1; y++){
         for(var x = 1; x< width-1; x++){
-            if(Math.random()<0.001*y){
+            if(Math.random()<0.00005*y*pixelSize){
                 if(waterfallNum<5){
                     if(!image[y][x] && !image[y][x-1]&& !image[y][x+1] && 
                        !image[y-1][x] && !image[y-1][x-1]&& !image[y-1][x+1] && 
