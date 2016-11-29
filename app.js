@@ -1,6 +1,6 @@
 var ctx;
 var canvas;
-var pixelSize = 5;
+var pixelSize = 8;
 
 var rule = 62;
 var ruleArray = new Array(8);
@@ -18,7 +18,8 @@ function init(){
     height = canvas.height/pixelSize;
     
      image = Array.matrix(height, width,false);
-    
+    ctx.fillStyle ='skyblue';
+    ctx.fillRect(0,0,width*pixelSize,width*height);
     calculateRule();
 //    console.log(ruleArray);
     
@@ -68,24 +69,37 @@ function perform(){
     for(var y = 0; y< height; y++){
         for(var x = 0; x< width; x++){
             if(image[y][x]){
-                drawSquare(x*pixelSize,y*pixelSize, 'rgb('+Math.floor(height-y+255-y)+','+Math.floor(height-y+255-y)+','+Math.floor(height-y+255-y)+')', pixelSize);
+                drawSquare(x*pixelSize,y*pixelSize, 'white', pixelSize);
                 num++;
+                if(Math.random()<0.0001*y ){
+                    drawSquare(x*pixelSize,(y-1)*pixelSize, '#422c10', pixelSize);
+                    drawSquare(x*pixelSize,(y-2)*pixelSize, '#1a4a3c', pixelSize);
+                    drawSquare((x+1)*pixelSize,(y-2)*pixelSize, '#1a4a3c', pixelSize);
+                    drawSquare((x-1)*pixelSize,(y-2)*pixelSize, '#1a4a3c', pixelSize);
+                    drawSquare((x+1)*pixelSize,(y-3)*pixelSize, '#1a4a3c', pixelSize);
+                    drawSquare((x-1)*pixelSize,(y-3)*pixelSize, '#1a4a3c', pixelSize);
+                    drawSquare(x*pixelSize,(y-3)*pixelSize, '#1a4a3c', pixelSize);
+                    drawSquare(x*pixelSize,(y-4)*pixelSize, '#1a4a3c', pixelSize);
+                    drawSquare(x*pixelSize,(y-5)*pixelSize, '#1a4a3c', pixelSize);
+                }
+                if(y>1 && !image[y-1][x] && Math.random()<0.001*y ){
+                    drawSquare(x*pixelSize,(y-1)*pixelSize, 'silver', pixelSize);
+                }
             } else {
                 drawSquare(x*pixelSize,y*pixelSize, 'skyblue', pixelSize);
                 var tmp = y;
                 while(tmp>0){
                     if(image[tmp][x]){
-                        drawSquare(x*pixelSize,y*pixelSize, 'rgb('+Math.floor(y*0.5)+','+Math.floor(y*0.5)+','+Math.floor(y*0.5)+')', pixelSize);
+                        drawSquare(x*pixelSize,y*pixelSize, 'lightgray', pixelSize);
                         tmp=0;
-                        console.log('rgb('+Math.ceil(height-y)+','+Math.ceil(height-y)+','+Math.ceil(height-y)+')');
                     }
                     tmp--;
                 }
                 if(y>1 && image[y-1][x]){
                     if(y>1 && image[y-2][x]){
-                        drawSquare(x*pixelSize,y*pixelSize, 'rgb('+Math.floor(y*1)+','+Math.floor(y*1)+','+Math.floor(y*1)+')', pixelSize);
+                        drawSquare(x*pixelSize,y*pixelSize, 'grey)', pixelSize);
                     } else {
-                        drawSquare(x*pixelSize,y*pixelSize, 'rgb('+Math.floor(y*0.5)+','+Math.floor(y*0.7)+','+Math.floor(y*0.8)+')', pixelSize);
+                        drawSquare(x*pixelSize,y*pixelSize, 'silver', pixelSize);
                     }
                     
                 }
@@ -148,8 +162,11 @@ function drawPixel(x,y,color){
 }
 
 function drawSquare(x,y,color,size){
-    ctx.fillStyle =color;
-    ctx.fillRect(x,y,size,size);
+    setTimeout(function(){
+        ctx.fillStyle =color;
+        ctx.fillRect(x,y,size,size);
+    }, 1*y);
+    
 }
 
 function resizeCanvas(e) {
