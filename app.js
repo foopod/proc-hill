@@ -18,7 +18,7 @@ function init(){
     height = canvas.height/pixelSize;
     
      image = Array.matrix(height, width,false);
-    ctx.fillStyle ='skyblue';
+    ctx.fillStyle ='#2f5d87';
     ctx.fillRect(0,0,width*pixelSize,width*height);
     calculateRule();
 //    console.log(ruleArray);
@@ -31,11 +31,10 @@ function perform(){
     var num = 0;
     var centre = Math.floor(width/2);
     image[0][centre] = true;
-    image[1][centre] = true;
     
 //    console.log(image);
     
-    for(var y = 2; y < height; y++){
+    for(var y = 1; y < height; y++){
         rule = ruleset[getRandomInt(0,ruleset.length)];
         calculateRule();
         for(var x =0; x < width; x++){
@@ -98,7 +97,7 @@ function perform(){
                     drawSquare(x*pixelSize,(y-1)*pixelSize, 'silver', pixelSize);
                 }
             } else {
-                drawSquare(x*pixelSize,y*pixelSize, 'skyblue', pixelSize);
+                drawSquare(x*pixelSize,y*pixelSize, '#2f5d87', pixelSize);
                 var tmp = y;
                 while(tmp>0){
                     if(image[tmp][x]){
@@ -117,6 +116,34 @@ function perform(){
                 }
             }
             
+        }
+    }
+    
+    var waterfallNum = 0.0;
+    for(var y = 4; y< height-1; y++){
+        for(var x = 1; x< width-1; x++){
+            if(Math.random()<0.001*y){
+                if(waterfallNum<5){
+                    if(!image[y][x] && !image[y][x-1]&& !image[y][x+1] && 
+                       !image[y-1][x] && !image[y-1][x-1]&& !image[y-1][x+1] && 
+                       !image[y-2][x] && !image[y-2][x-1]&& !image[y-2][x+1] && 
+                       !image[y-3][x] && !image[y-3][x-1]&& !image[y-3][x+1] && 
+                       image[y-4][x] && image[y-4][x-1]&& image[y-4][x+1]){
+                        drawSquare(x*pixelSize,y*pixelSize, 'dimgrey', pixelSize);
+                        waterfallNum++;
+                        for(var i = 1; i < height-y; i++){
+                            if(!image[y+i][x]){
+                                drawSquare(x*pixelSize,(y+i)*pixelSize, 'skyblue', pixelSize);
+                            } else if(image[y+i][x-1]){
+                                drawSquare((x-1)*pixelSize,(y+i)*pixelSize, 'skyblue', pixelSize);
+                            } else if(image[y+i][x+1]){
+                                drawSquare((x+1)*pixelSize,(y+i)*pixelSize, 'skyblue', pixelSize);
+                            }
+                        }
+                    }
+                    
+                }
+            }
         }
     }
 }
@@ -170,11 +197,8 @@ function drawPixel(x,y,color){
 }
 
 function drawSquare(x,y,color,size){
-    setTimeout(function(){
-        ctx.fillStyle =color;
-        ctx.fillRect(x,y,size,size);
-    }, 1*y);
-    
+    ctx.fillStyle =color;
+    ctx.fillRect(x,y,size,size);
 }
 
 function resizeCanvas(e) {
