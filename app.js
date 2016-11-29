@@ -70,7 +70,25 @@ function perform(){
         for(var x = 0; x< width; x++){
             if(image[y][x]){
                 drawSquare(x*pixelSize,y*pixelSize, 'white', pixelSize);
-                num++;
+                //Caves
+                if(image[y][x-3] && image[y][x-2] && image[y][x-1]&& image[y][x+1]&& image[y][x+2]&& image[y][x+3]&&Math.random()<0.03){
+                    drawSquare(x*pixelSize,(y-1)*pixelSize, 'black', pixelSize);
+                    drawSquare((x-1)*pixelSize,(y-1)*pixelSize, 'black', pixelSize);
+                    drawSquare((x+1)*pixelSize,(y-1)*pixelSize, 'black', pixelSize);
+                    drawSquare(x*pixelSize,(y-2)*pixelSize, 'black', pixelSize);
+                    drawSquare((x-1)*pixelSize,(y-2)*pixelSize, 'black', pixelSize);
+                    drawSquare((x+1)*pixelSize,(y-2)*pixelSize, 'black', pixelSize);
+                    drawSquare(x*pixelSize,(y-3)*pixelSize, 'black', pixelSize);
+                    
+                    drawSquare((x-2)*pixelSize,(y-1)*pixelSize, 'dimgray', pixelSize);
+                    drawSquare((x+2)*pixelSize,(y-1)*pixelSize, 'dimgray', pixelSize);
+                    drawSquare((x-2)*pixelSize,(y-2)*pixelSize, 'dimgray', pixelSize);
+                    drawSquare((x+2)*pixelSize,(y-2)*pixelSize, 'dimgray', pixelSize);
+                    drawSquare((x-1)*pixelSize,(y-3)*pixelSize, 'dimgray', pixelSize);
+                    drawSquare((x+1)*pixelSize,(y-3)*pixelSize, 'dimgray', pixelSize);
+                    drawSquare(x*pixelSize,(y-4)*pixelSize, 'dimgray', pixelSize);
+                }
+                //Draw Tree
                 if(Math.random()<0.0001*y ){
                     drawSquare(x*pixelSize,(y-1)*pixelSize, '#422c10', pixelSize);
                     drawSquare(x*pixelSize,(y-2)*pixelSize, '#1a4a3c', pixelSize);
@@ -82,6 +100,7 @@ function perform(){
                     drawSquare(x*pixelSize,(y-4)*pixelSize, '#1a4a3c', pixelSize);
                     drawSquare(x*pixelSize,(y-5)*pixelSize, '#1a4a3c', pixelSize);
                 }
+                //Draw Rock
                 if(y>1 && !image[y-1][x] && Math.random()<0.001*y ){
                     drawSquare(x*pixelSize,(y-1)*pixelSize, 'silver', pixelSize);
                 }
@@ -107,10 +126,6 @@ function perform(){
             
         }
     }
-    if(num>30){
-//        console.log(rule + " is good");
-    }
-//    console.log(rule);
 }
 
 function calculateCell(a){
