@@ -6,6 +6,7 @@ var rule = 62;
 var ruleArray = new Array(8);
 
 var ruleset = [30,118, 46,56];
+var seed = 0;
 
 var width,height,image;
 
@@ -22,7 +23,7 @@ function init(){
     ctx.fillRect(0,0,width*pixelSize,width*height);
     calculateRule();
 //    console.log(ruleArray);
-    
+    seed = Math.floor(Math.random()*10000);
     perform();
     
 }
@@ -62,14 +63,15 @@ function perform(){
     drawPixelFog(1);
     drawSun('#F9E79F', (0.5*width*Math.random() + 0.2*width)*pixelSize,Math.random()*0.2*height*pixelSize,Math.random() * 0.1*width*pixelSize);
    
-    
+    var lastCave = 0;
     for(var y = 0; y< height; y++){
         for(var x = 0; x< width; x++){
             if(image[y][x]){
                 var whiteColor = Math.floor(255-Math.random()*10);
                 drawSquare(x*pixelSize,y*pixelSize, 'rgb('+whiteColor+','+whiteColor+','+whiteColor+')', pixelSize);
                 //Caves
-                if(image[y][x-3] && image[y][x-2] && image[y][x-1]&& image[y][x+1]&& image[y][x+2]&& image[y][x+3]&&Math.random()<0.03){
+                if(image[y][x-3] && image[y][x-2] && image[y][x-1]&& image[y][x+1]&& image[y][x+2]&& image[y][x+3]&&Math.random()<0.03 && lastCave != y){
+                    lastCave = y;
                     drawSquare(x*pixelSize,(y-1)*pixelSize, 'black', pixelSize);
                     drawSquare((x-1)*pixelSize,(y-1)*pixelSize, 'black', pixelSize);
                     drawSquare((x+1)*pixelSize,(y-1)*pixelSize, 'black', pixelSize);
@@ -87,7 +89,7 @@ function perform(){
                     drawSquare(x*pixelSize,(y-4)*pixelSize, 'dimgray', pixelSize);
                 }
                 //Draw Tree
-                if(Math.random()<0.0001*y ){
+                if(Math.random()<0.0001*y){
                     var speckledGreen = Math.floor(130-Math.random()*60);
                     var green = 'rgb('+50+','+speckledGreen+','+50+')';
                     drawSquare(x*pixelSize,(y-1)*pixelSize, '#422c10', pixelSize);
@@ -129,11 +131,16 @@ function perform(){
         }
     }
     
+    setInterval(waterfalls, 66);
+    
+}
+
+function waterfalls(){
     //2nd Pass for waterfalls
     var waterfallNum = 0.0;
     for(var y = 4; y< height-1; y++){
         for(var x = 1; x< width-1; x++){
-            if(Math.random()<0.00005*y*pixelSize){
+            if(Math.seededRandom(1,0,seed)<0.001*y*pixelSize/(waterfallNum+1)){
                 if(waterfallNum<y/30){
                     if(!image[y][x] && !image[y][x-1]&& !image[y][x+1] && 
                        !image[y-1][x] && !image[y-1][x-1]&& !image[y-1][x+1] && 
@@ -143,8 +150,8 @@ function perform(){
                         drawSquare(x*pixelSize,y*pixelSize, 'black', pixelSize);
                         waterfallNum++;
                         for(var i = 1; i < height-y; i++){
-                            var speckledOther = Math.floor(130-Math.random()*40);
-                            var speckledBlue = Math.floor(200-Math.random()*40);
+                            var speckledOther = Math.floor(130-Math.random()*30);
+                            var speckledBlue = Math.floor(200-Math.random()*30);
                             if(!image[y+i][x]){
                                 drawSquare(x*pixelSize,(y+i)*pixelSize, 'rgb('+(speckledOther-10)+','+speckledOther+','+speckledBlue+')', pixelSize);
                             } else if(image[y+i][x-1]){
@@ -159,7 +166,6 @@ function perform(){
             }
         }
     }
-    drawPixelFog(0.3);
 }
 
 function drawPixelFog(percentage){
@@ -252,6 +258,15 @@ Array.matrix = function(numrows, numcols, initial){
     return arr;
 }
 
+Math.seededRandom = function(max, min, seed) {
+    max = max || 1;
+    min = min || 0;
+ 
+    var newseed = (seed * 9301 + 49297) % 233280;
+    var rnd = newseed / 233280;
+ 
+    return min + rnd * (max - min);
+}
 
 function createArray(length) {
     var arr = new Array(length || 0),
