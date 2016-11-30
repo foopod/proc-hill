@@ -118,7 +118,7 @@ function perform(){
                 }
                 if(y>1 && image[y-1][x]){
                     if(y>1 && image[y-2][x]){
-                        drawSquare(x*pixelSize,y*pixelSize, 'grey', pixelSize);
+                        drawSquare(x*pixelSize,y*pixelSize, '#F1F1F1', pixelSize);
                     } else {
                         drawSquare(x*pixelSize,y*pixelSize, 'silver', pixelSize);
                     }
